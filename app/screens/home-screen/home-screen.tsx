@@ -1,18 +1,19 @@
 import {useCallback, useEffect, useState, type FC} from 'react';
-import {ActivityIndicator, FlatList, View} from 'react-native';
+import {ActivityIndicator, FlatList, Image, View} from 'react-native';
 import {colors} from '../../styles/styles-variables';
-import CustomText from '../../atoms/CustomText';
+import CustomText from '../../atoms/custom-text';
 import {useGetAllMoviesQuery} from '../../api/movies-api';
+import MoviesListItem from '../../organisms/movies-list-item/movies-list-item';
+import MoviesFilter from '../../organisms/movies-filter/movies-filter';
 
 const HomeScreen: FC = () => {
   const [page, setPage] = useState(1);
   const [movies, setMovies] = useState<any>([]);
+
   const {data, isLoading, isFetching, isError} = useGetAllMoviesQuery(
     {page, limit: 20},
     {skip: page < 1},
   );
-
-  console.log(data);
 
   useEffect(() => {
     if (data?.items) {
@@ -48,15 +49,32 @@ const HomeScreen: FC = () => {
       style={{
         backgroundColor: colors.primary_bg,
         flex: 1,
-        paddingHorizontal: 24,
       }}>
+      <MoviesFilter />
+
       <FlatList
         data={movies}
-        renderItem={({item}) => <CustomText>{item.id}</CustomText>}
+        renderItem={({item}) => (
+          <MoviesListItem
+            width={170}
+            height={260}
+            source={{uri: item?.primaryImage?.url}}
+            id={item.id}
+            movie_title={item?.titleText?.text}
+          />
+        )}
+        numColumns={2}
+        contentContainerStyle={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexGrow: 1,
+        }}
+        key={2}
         keyExtractor={item => item.id.toString()}
         onEndReached={loadMoreItems}
         onEndReachedThreshold={0.5}
         ListFooterComponent={renderFooter}
+        horizontal={false}
       />
     </View>
   );

@@ -1,11 +1,12 @@
+import 'react-native-reanimated';
 import React from 'react';
-import {SafeAreaView, StatusBar, useColorScheme, View} from 'react-native';
-
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import HomeScreen from './screens/home-screen/home-screen';
+import {StatusBar, useColorScheme} from 'react-native';
 import {colors} from './styles/styles-variables';
 import {Provider} from 'react-redux';
 import {store} from './store';
+import {NavigationContainer} from '@react-navigation/native';
+import {RootStack} from './navigation/navigation';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const App = (): React.JSX.Element => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -17,14 +18,15 @@ const App = (): React.JSX.Element => {
 
   return (
     <Provider store={store}>
-      <SafeAreaView style={backgroundStyle}>
-        <StatusBar
-          barStyle={'light-content'}
-          backgroundColor={backgroundStyle.backgroundColor}
-        />
-
-        <HomeScreen />
-      </SafeAreaView>
+      <StatusBar
+        barStyle={'light-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
+      <SafeAreaProvider style={backgroundStyle}>
+        <NavigationContainer>
+          <RootStack />
+        </NavigationContainer>
+      </SafeAreaProvider>
     </Provider>
   );
 };

@@ -4,6 +4,7 @@ export const colors = {
   secondary_bg: '#3A3F47',
   gray: '#67686D',
   blue: '#0296E5',
+  yellow: '#FF8700',
 } as const;
 
 export const font_size = {
